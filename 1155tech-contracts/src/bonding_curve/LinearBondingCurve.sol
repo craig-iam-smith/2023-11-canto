@@ -17,13 +17,25 @@ contract LinearBondingCurve is IBondingCurve {
         override
         returns (uint256 price, uint256 fee)
     {
-        for (uint256 i = shareCount; i < shareCount + amount; i++) {
-            uint256 tokenPrice = priceIncrease * i;
-            price += tokenPrice;
-            fee += (getFee(i) * tokenPrice) / 1e18;
+        
+        if (log2(shareCount) == log2(shareCount + amount)) {
+            price = priceIncrease * (shareCount*(shareCount+1)/2);
+            fee = ((getFee(shareCount) * price) / 1e18) * amount;
+            
+            for (uint256 i = shareCount+1; i < shareCount+amount; i++) {
+                price += priceIncrease*i;
+            }
+            
+        }else 
+        
+        {
+            for (uint256 i = shareCount; i < shareCount + amount; i++) {
+                uint256 tokenPrice = priceIncrease * i;
+                price += tokenPrice;
+                fee += (getFee(i) * tokenPrice) / 1e18;
+            }
         }
     }
-
     function getFee(uint256 shareCount) public pure override returns (uint256) {
         uint256 divisor;
         if (shareCount > 1) {

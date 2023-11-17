@@ -26,4 +26,20 @@ contract LinearBondingCurveTest is Test {
             LINEAR_INCREASE / 10 + (2 * LINEAR_INCREASE) / 10 + (3 * LINEAR_INCREASE) / 10 + (4 * LINEAR_INCREASE) / 20
         );
     }
+    function testGetPrice100() public {
+        (uint256 price, uint256 fee) = bondingCurve.getPriceAndFee(130, 100);
+        assertGt(price, LINEAR_INCREASE + 2 * LINEAR_INCREASE + 3 * LINEAR_INCREASE + 4 * LINEAR_INCREASE);
+        assertGt(
+            fee,
+            LINEAR_INCREASE / 10 + (2 * LINEAR_INCREASE) / 10 + (3 * LINEAR_INCREASE) / 10 + (4 * LINEAR_INCREASE) / 20
+        );
+    }
+    function testGetPrice1000() public {
+        (uint256 price, uint256 fee) = bondingCurve.getPriceAndFee(1026, 1000);
+        assertGt(price, LINEAR_INCREASE + 2 * LINEAR_INCREASE + 3 * LINEAR_INCREASE + 4 * LINEAR_INCREASE);
+        assertGt(
+            fee,
+            LINEAR_INCREASE / 10 + (2 * LINEAR_INCREASE) / 10 + (3 * LINEAR_INCREASE) / 10 + (4 * LINEAR_INCREASE) / 20
+        );
+    }
 }
